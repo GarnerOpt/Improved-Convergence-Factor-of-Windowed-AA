@@ -1,0 +1,162 @@
+%--------------------------------------------------------------------------
+% Reviewer 4's Code Discussion
+%--------------------------------------------------------------------------
+clc;
+clear all;
+close all;
+
+%--------------------------------------------------------------------------
+% Problem Set-up for solving g(x) = AAx-b = 0. 
+%--------------------------------------------------------------------------
+n = 100;
+A1 = rand(n);
+A2 = rand(n);
+A1 = A1'*A1;
+A2 = A2'*A2;
+A = A1-A2;
+A = A/(1.5*norm(A));
+I = eye(n,n);
+W = I-A;
+xstar = rand(n,1);
+b = A*xstar;
+gx = @(x) A*x-b;              % Goal: Find x s.t. g(x) = 0 i.e. Ax = b
+
+%--------------------------------------------------------------------------
+% Setting-Up Their Approach 
+%--------------------------------------------------------------------------
+L = max(eigs(A));
+mu = eigs(A,1,'smallestabs');
+
+xi = (sqrt(L/mu)+1)/(sqrt(L/mu)-1);
+pkm = @(m) 2./(xi.^m + xi.^(-m));
+
+m = 3;
+N = 1000;
+
+x = randn(n,1);
+xint=x;
+
+G = [];
+X = [];
+error_vec = zeros(N,1);
+
+for i=1:N
+    G(:,end+1) = gx(x);
+    X(:,end+1) = x;
+
+    if(size(G,2) == 1)
+        x = x-gx(x)/L;
+    end
+
+    if(size(G,2) == m+1)
+        G(:,1) = [];
+        X(:,1) = [];
+    end
+
+    GG = G'*G;
+    alpha = GG\ones(size(GG,1));
+    alpha = alpha/sum(alpha);
+
+    %factor 1/L: mixing parameter.
+    % Its like analysing the fixed point
+    % q(x) = (I-AA/L)x.
+    x = (X-G/L)*alpha;
+
+    % My addition to check the r-linear convergence rate of method and its
+    % estimate
+    if i==1
+        gxnorm(i)=norm(gx(x));
+    else
+        gxnorm(i) = max(gxnorm(i-1),norm(gx(x))^(1/i));
+    end
+    
+    error_vec(i) = norm(x-xstar);
+end
+
+%--------------------------------------------------------------------------
+% Setting Up Our Approach 
+%--------------------------------------------------------------------------
+W = I - A;
+q_data = {W,b};
+[xfinal, x_iter, err_iter, runtime] = AA_Rn(@q, q_data, xint, 2, 1, 1000, 10e-13);
+for i=1:length(x_iter)
+    err_vec_us(i) = norm(xstar-x_iter{i});
+end
+
+%--------------------------------------------------------------------------
+% Compare Error to xstar
+%--------------------------------------------------------------------------
+figure(1);
+semilogy(error_vec,'r-','LineWidth',2);
+hold on;
+semilogy(err_vec_us,'b-','LineWidth',2);
+ylabel('||x^k - x^*||','FontSize',14,'FontWeight','bold')
+xlabel('Iteration (k)','FontSize',14,'FontWeight','bold')
+legend({'THEM','US'},'FontSize',14,'FontWeight','bold')
+
+%--------------------------------------------------------------------------
+% Compare Convergence Rate Estimates
+%--------------------------------------------------------------------------
+maxW = max(eig(W));
+minW = min(eig(W));
+aval = linspace(0,1e3,10e7);
+for i=1:length(aval)
+    a = aval(i);
+    y(i) = r_bound(a,maxW,minW);
+end
+theta = max(y);
+r_est = sqrt(norm(A,2)*abs(sin(theta)));
+us_rlinear_err = max_n_to_end(r_linear_err(x_iter,xstar));
+
+r_rate = ((1-mu/L)*pkm(m-1))^(1/m);
+figure(2);
+semilogy(max_n_to_end(gxnorm),'r-');
+hold on;
+semilogy([1,N],[r_rate,r_rate],'k-')
+hold on;
+semilogy(us_rlinear_err,'b-');
+hold on;
+semilogy([1,N],[r_est,r_est],'g-');
+legend({'THEM','Their Rate Est','US','Our Rate Est.'})
+set(gca, 'YDir', 'reverse')
+
+% error_vec = error_vec/error_vec(1); %Normalization, easier to analyse plot
+% semilogy(error_vec)
+% hold on
+% r_rate = ((1-mu/L)*pkm(m-1))^(1/m);
+% semilogy(1:N, error_vec(1)*r_rate.^(1:N))
+% 
+% figure;
+% semilogy(1:N, error_vec(1)*r_rate.^-(1:N))
+% hold on;
+% semilogy(1:N,error_vec.^-(1:N))
+
+%==========================================================================
+%%% Functions for our methods and estimates %%%
+%==========================================================================
+function out = q(x,q_data)
+    out = q_data{1}*x + q_data{2};
+end
+
+function out = r_bound(a,maxW,minW)
+    num = abs(maxW-minW)*a;
+    den = sqrt(4+((2-maxW-minW)^2)*(a^2));
+    term1 = asin(num/den);
+    term2 = abs( atan(a) - atan((1-0.5*(maxW + minW))*a)  );
+    out = term1 + term2;  
+end
+
+function r_err = r_linear_err(x_iter,xstar)
+    for i=1:length(x_iter)
+        r_err(i) = norm(x_iter{i}-xstar)^(1/i);
+    end
+end
+
+function new_vec = max_n_to_end(vec)
+    new_vec = zeros(length(vec),1);
+    for i=1:length(vec)
+        new_vec(i) = max(vec(i:end));
+    end
+end
+
+
