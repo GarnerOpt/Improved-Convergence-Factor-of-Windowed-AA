@@ -1,0 +1,22 @@
+%==========================================================================
+% This script compares Anderson Acceleration with full-memory, with
+% restarting, and with a sliding frame. 
+%==========================================================================
+clc;
+clear all;
+close all;
+
+% Dimension
+n = 500;
+maxiter = 1000; 
+tol = 1e-12; 
+m = 2;  
+beta = 1;
+
+% Data generation and setting random number generator
+rng(13)
+[M,~] = linear_operator_data(n,0,1,-1);
+
+
+% Full-Memory
+[xfinal_full, x_iter, err_iter, runtime] = AA_Rn(q, q_data, x0, m, beta, maxiter, tol)
