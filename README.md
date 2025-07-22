@@ -16,9 +16,12 @@ Steps:
 (2) Before running the necessary scripts make sure the folder and all its subfolders are on the the file path. 
 
 (3) Run the following scripts from the command line to reproduce the figures in the paper, or similar figures under the same data settings: 
-	* Linear_Operator_Simulations.m
-	* Nonlinear_Operator_Simulations.m
-	* Nonlinear_Operator_Simulations_SHORT.m  (recommended, see (2) and (3) below)
+	
+ * Linear_Operator_Simulations.m
+	
+ * Nonlinear_Operator_Simulations.m
+	
+ * Nonlinear_Operator_Simulations_SHORT.m  (recommended, see (2) and (3) below)
 
 -----------------	
 IMPORTANT NOTES:
