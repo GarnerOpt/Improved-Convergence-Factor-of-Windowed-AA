@@ -6,7 +6,7 @@
 %
 % Due to the randomness of the initializations these experiments behavior
 % simiarly to the figures presented in the paper. To generate the figures
-% in the paper run: AISTATS_Nonlinear_Operation_Simulations_SHORT.m
+% in the paper run: Nonlinear_Operation_Simulations_SHORT.m
 %==========================================================================
 clc; clear all; 
 
