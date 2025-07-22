@@ -7,7 +7,7 @@
 %
 % For the experiments which take longer the data associated with the
 % solutions are imported and the figures made. If the entire computations
-% is desired to be performed run AISTATS_Nonlinear_Operator_Simulations.m
+% is desired to be performed run Nonlinear_Operator_Simulations.m
 %==========================================================================
 
 clc; clear all; close all;
