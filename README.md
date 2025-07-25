@@ -5,8 +5,8 @@ This repository stores the code for the numerical experiments in our paper - "Im
 -------------
 Description: 
 -------------
-This README file explains how to reproduce the results contained in the paper, "Improved Convergence Rates of Anderson Acceleration for a Large
-Class of Fixed-Point Iterations". All code is written in MATLAB R2021b and running the code requires access to a MATLAB license. 
+This README file explains how to reproduce the results contained in the paper, "Improved Convergence Factor of Windowed Anderson Acceleration
+for Symmetric Fixed-Point Iterations". All code is written in MATLAB R2021b and running the code requires access to a MATLAB license. 
 
 -------
 Steps:
