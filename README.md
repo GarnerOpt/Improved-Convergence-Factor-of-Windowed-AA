@@ -11,19 +11,19 @@ for Symmetric Fixed-Point Iterations". All code is written in MATLAB R2021b and 
 -------
 Steps:
 -------
-(1) Download the code in the folder called, Windowed Anderson Acceleration. 
+(1) Download the code in the folder called, AA_Code_Final. 
 
 (2) Before running the necessary scripts make sure the folder and all its subfolders are on the the file path. 
 
 (3) Run the following scripts from the command line to reproduce the figures in the paper, or similar figures under the same data settings: 
 	
- * Linear_Operator_Simulations.m
+ * Linear_Operator_Simulations.m  (reproduces Figure 1) 
 	
- * Nonlinear_Operator_Simulations.m
+ * Nonlinear_Operator_Simulations.m  (reproduces Figures 2-6) 
 	
- * Nonlinear_Operator_Simulations_SHORT.m  (recommended, see (2) and (3) below)
+ * Nonlinear_Operator_Simulations_SHORT.m  (recommended, see (2) and (3) below; reproduces Figures 2-6)
 
- * Comparing_AA_Approaches_TME.m
+ * Comparing_AA_Approaches_TME.m (reproduces Figure 7)
 
 -----------------	
 IMPORTANT NOTES:
@@ -36,3 +36,5 @@ The first, Nonlinear_Operator_Simulations.m, runs all of the experiments in thei
 
 (3) Nonlinear_Operator_Simulations_SHORT.m presents the figures presented in the paper by loading the data computed from these experiments. 
 Thus, this script takes significantly less time to run when compared to Nonlinear_Operator_Simulations.m
+
+(4) Note, the figures showing the compute time shall vary based on your personal machine. 
